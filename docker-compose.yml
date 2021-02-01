@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
   db:
@@ -6,18 +6,24 @@ services:
     container_name: mysql_5.7
     restart: unless-stopped
     environment:
-      - MYSQL_DATABASE=docker_db
+      - MYSQL_DATABASE=docker_init_db
       - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     ports: 
       - 3307:3306
     volumes: 
-      - dbdata:/var/lib/mysql
+      # - dbdata:/var/lib/mysql
+      - local_dbdata:/var/lib/mysql
       - ./my.cnf:/etc/mysql/my.cnf
     command: '--default-authentication-plugin=mysql_native_password'
 
 
 volumes:
-  dbdata:
+  # dbdata:
+  local_dbdata:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /home/rajesh/DockerVol/mysql_5.7
 
 networks:
   default:
